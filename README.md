@@ -23,6 +23,8 @@ Run a subset:
 ./setup.sh --only homebrew,cli,shell
 ./setup.sh --only corretto,android,fvm
 ./setup.sh --only fnm,pnpm
+./setup.sh --only ssh
+./setup.sh --only git
 ./setup.sh --list
 ```
 
@@ -46,6 +48,8 @@ modules/
   12-golang.sh           # Go
   13-fnm.sh              # fnm + Node LTS
   14-pnpm.sh             # pnpm (uses fnm Node)
+  15-ssh.sh              # ed25519 key + Keychain + ~/.ssh/config
+  16-git.sh              # global user.name / user.email
 config/
   Brewfile.cli           # declarative CLI formulae
 ```
@@ -92,3 +96,5 @@ config/
 - PDF Expert / Magnet / Xcode / iWork remain App Store (or optional casks).
 - Virtualization: prefer OrbStack / UTM / Docker Desktop on Apple Silicon over VirtualBox.
 - After toolchain modules, open a new terminal (or `exec zsh`) so `.zshenv` / `.zshrc` changes apply.
+- SSH module (`15-ssh.sh`): creates `~/.ssh/id_ed25519` with a passphrase, writes a generic `Host *` block (`AddKeysToAgent` / `UseKeychain`), and loads the key into the macOS Keychain so later SSH sessions rarely re-prompt. Key generation is interactive only (`CONFIRM_ALL=1` skips generation if the key is missing).
+- Git module (`16-git.sh`): sets `git config --global user.name` / `user.email`. Defaults to current values; overrides via `GIT_USER_NAME` / `GIT_USER_EMAIL`. With `CONFIRM_ALL=1` and no defaults, the module skips setting empty fields.

@@ -16,7 +16,7 @@ source "${ROOT}/lib/common.sh"
 
 require_macos
 
-MODULE_ORDER="xcode homebrew shell cli apps fonts defaults corretto android fvm uv golang fnm pnpm"
+MODULE_ORDER="xcode homebrew shell cli apps fonts defaults corretto android fvm uv golang fnm pnpm ssh git"
 
 module_file() {
   case "$1" in
@@ -34,6 +34,8 @@ module_file() {
     golang)   printf '%s' "${MODULES_DIR}/12-golang.sh" ;;
     fnm)      printf '%s' "${MODULES_DIR}/13-fnm.sh" ;;
     pnpm)     printf '%s' "${MODULES_DIR}/14-pnpm.sh" ;;
+    ssh)      printf '%s' "${MODULES_DIR}/15-ssh.sh" ;;
+    git)      printf '%s' "${MODULES_DIR}/16-git.sh" ;;
     *)        return 1 ;;
   esac
 }
