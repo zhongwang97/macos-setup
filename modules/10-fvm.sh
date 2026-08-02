@@ -27,11 +27,12 @@ fi
 
 flutter_ver="$(ask "Flutter version to install" "${DEFAULT_FLUTTER_VERSION}")"
 
+# Use env(1): bash 3.2 rejects VAR=val cmd when VAR is readonly.
 log_info "fvm install ${flutter_ver}"
-FVM_CACHE_PATH="${FVM_CACHE_PATH}" "${FVM_BIN}" install "${flutter_ver}"
+env FVM_CACHE_PATH="${FVM_CACHE_PATH}" "${FVM_BIN}" install "${flutter_ver}"
 
 log_info "fvm global ${flutter_ver}"
-FVM_CACHE_PATH="${FVM_CACHE_PATH}" "${FVM_BIN}" global "${flutter_ver}"
+env FVM_CACHE_PATH="${FVM_CACHE_PATH}" "${FVM_BIN}" global "${flutter_ver}"
 
 export FVM_CACHE_PATH
 export PATH="${PATH}:${FVM_CACHE_PATH}/default/bin"

@@ -22,6 +22,7 @@ CASKS=(
   appcleaner
   the-unarchiver
   iina
+  localsend
   balenaetcher
   istat-menus
 )

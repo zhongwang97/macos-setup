@@ -103,14 +103,17 @@ quarantine_path() {
 }
 
 # Ask for a string with optional default.
+# Prompt MUST go to stderr: callers capture stdout via $(ask ...). Writing the
+# prompt to stdout would bake "Prompt [default]: value" into the answer (and
+# look like a hang, because nothing appears on the terminal).
 ask() {
   local prompt="$1"
   local default="${2:-}"
   local reply
   if [[ -n "${default}" ]]; then
-    printf '%s [%s]: ' "${prompt}" "${default}"
+    printf '%s [%s]: ' "${prompt}" "${default}" >&2
   else
-    printf '%s: ' "${prompt}"
+    printf '%s: ' "${prompt}" >&2
   fi
   read -r reply || true
   printf '%s' "${reply:-${default}}"
