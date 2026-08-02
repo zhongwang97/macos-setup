@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# GUI apps via Homebrew Cask (plus a few AI coding agents that ship as casks).
+# GUI apps via Homebrew Cask (plus AI coding tools: CLI and desktop).
 # Whole module is optional; each item can also be confirmed individually
 # (CONFIRM_ALL=1 auto-yeses both levels).
 
@@ -23,7 +23,6 @@ CASKS=(
   google-chrome
   iterm2
   visual-studio-code
-  cursor
   jetbrains-toolbox
   raycast
   shottr
@@ -33,10 +32,20 @@ CASKS=(
   localsend
   balenaetcher
   istat-menus
+  "stats|Stats (menu bar system monitor)"
   "wetype|WeType (微信输入法)"
-  "codex|Codex (OpenAI coding agent)"
-  "claude-code|Claude Code"
-  "opencode-desktop|OpenCode"
+)
+
+# AI coding tools kept in this module for convenience.
+# Format: "kind:pkg_id|Human label"  where kind is cask|formula
+# Some entries are terminal CLIs packaged as casks (no .app); labels say so.
+AI_TOOLS=(
+  "cask:cursor|Cursor — desktop IDE (.app)"
+  "cask:codex|Codex CLI — terminal agent (bin/codex, not a .app)"
+  "cask:chatgpt|ChatGPT desktop — GUI (.app); Codex desktop merged into this (codex-app is deprecated)"
+  "cask:claude-code|Claude Code CLI — terminal agent (bin/claude, not a .app)"
+  "cask:claude|Claude Desktop — GUI chat app (.app)"
+  "cask:opencode-desktop|OpenCode Desktop — GUI app (.app)"
 )
 
 install_cask() {
@@ -56,8 +65,53 @@ install_cask() {
   fi
 }
 
+install_ai_tool() {
+  local spec="$1"
+  local kind_and_name="${spec%%|*}"
+  local label="${spec#*|}"
+  local kind="${kind_and_name%%:*}"
+  local name="${kind_and_name#*:}"
+
+  [[ "${label}" != "${spec}" ]] || label="${name}"
+
+  if brew_installed "${name}"; then
+    log_ok "already installed: ${name}"
+    return 0
+  fi
+  if ! confirm "Install ${label}?"; then
+    log_info "skipped ${name}"
+    return 0
+  fi
+  case "${kind}" in
+    cask)
+      brew_cask_install "${name}" || log_warn "failed: ${name}"
+      ;;
+    formula)
+      brew_install "${name}" || log_warn "failed: ${name}"
+      ;;
+    *)
+      log_warn "unknown package kind '${kind}' for ${name}"
+      ;;
+  esac
+}
+
 for app in "${CASKS[@]}"; do
   install_cask "${app}"
+done
+
+cat <<EOF
+
+${C_CYAN}${C_BOLD}AI coding tools (CLI vs desktop)${C_RESET}
+${C_DIM}  CLI     = terminal binary (codex / claude-code); no Dock app
+  Desktop = .app you open from Applications / Spotlight
+  Note: OpenAI's standalone Codex.app was merged into ChatGPT desktop
+        (brew cask: chatgpt). Prefer chatgpt over deprecated codex-app.
+        OpenCode CLI formula (opencode) is not offered here — only the desktop cask.${C_RESET}
+
+EOF
+
+for tool in "${AI_TOOLS[@]}"; do
+  install_ai_tool "${tool}"
 done
 
 # Optional paid / App Store notes
