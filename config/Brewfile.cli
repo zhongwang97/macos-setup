@@ -1,0 +1,23 @@
+# CLI formulae for macos-setup (brew bundle --file=...)
+# Keep this declarative and review before applying on a new machine.
+
+brew "bat"           # cat with syntax highlight
+brew "eza"           # modern ls (replaces tree for listing; keep tree too)
+brew "fd"            # modern find
+brew "fzf"           # fuzzy finder
+brew "gh"            # GitHub CLI
+brew "git"
+brew "git-delta"     # better git diffs
+brew "htop"
+brew "jq"
+brew "ripgrep"
+brew "tealdeer"      # fast tldr client
+brew "tree"
+brew "wget"
+brew "zoxide"        # smarter cd (replaces autojump)
+
+# Optional quality-of-life (uncomment if desired)
+# brew "lazygit"
+# brew "tmux"
+# brew "neovim"
+# brew "mise"         # polyglot version manager (node/python/ruby/…)
