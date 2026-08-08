@@ -11,6 +11,7 @@ brew "git-delta"     # better git diffs
 brew "htop"
 brew "jq"
 brew "ripgrep"
+brew "scc"           # fast code counter (Sloc Cloc and Code)
 brew "tealdeer"      # fast tldr client
 brew "tree"
 brew "wget"
